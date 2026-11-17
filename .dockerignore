@@ -1,0 +1,6 @@
+**
+!Dockerfile.airflow
+!dags/
+!dags/script/
+!dags/script/preprocessing/
+!dags/script/preprocessing/requirements-nlp.txt

@@ -4,3 +4,15 @@ logs/*
 config/*
 
 **/__pycache__/**
+# Local data and credentials
+output/
+result.json
+*.bak
+*.lock
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+*.pyc
+.venv/

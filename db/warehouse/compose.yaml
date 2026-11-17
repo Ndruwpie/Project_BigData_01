@@ -1,0 +1,60 @@
+name: tribun-warehouse-v3
+services:
+  l1:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bronze
+      POSTGRES_USER: l1
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Isi .env terlebih dahulu}
+      TZ: Asia/Jakarta
+    ports:
+      - "127.0.0.1:5441:5432"
+    volumes:
+      - pgbronze:/var/lib/postgresql/data
+      - ./init/bronze:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U l1 -d bronze"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  l2:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: silver
+      POSTGRES_USER: l2
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Isi .env terlebih dahulu}
+      TZ: Asia/Jakarta
+    ports:
+      - "127.0.0.1:5442:5432"
+    volumes:
+      - pgsilver:/var/lib/postgresql/data
+      - ./init/silver:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U l2 -d silver"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  l3:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: gold
+      POSTGRES_USER: l3
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Isi .env terlebih dahulu}
+      TZ: Asia/Jakarta
+    ports:
+      - "127.0.0.1:5443:5432"
+    volumes:
+      - pggold:/var/lib/postgresql/data
+      - ./init/gold:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U l3 -d gold"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+volumes:
+  pgbronze:
+  pgsilver:
+  pggold:

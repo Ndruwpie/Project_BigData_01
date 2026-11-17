@@ -1,0 +1,3 @@
+FROM apache/airflow:3.3.2
+COPY dags/script/preprocessing/requirements-nlp.txt /tmp/requirements-nlp.txt
+RUN pip install --no-cache-dir "apache-airflow==3.3.2" beautifulsoup4 requests -r /tmp/requirements-nlp.txt
